@@ -1,29 +1,99 @@
 # CloudProcure Supplier Service
 
-## Submission identity
+Supplier and catalog microservice for the **ProcureFlow Enterprise Procurement System**, developed for the ITS 2130 - Enterprise Cloud Architecture final project.
 
-- Student Name: `<STUDENT_NAME>`
-- Student Number: `<STUDENT_NUMBER>`
-- Slack Handle: `<SLACK_HANDLE>`
-- GCP Project ID: `<GCP_PROJECT_ID>`
+## Submission Information
 
-## Role and stack
+- **Student Name:** Thenuri Nethangi Nanayakkara
+- **Student ID:** 241711017
+- **Module:** ITS 2130 - Enterprise Cloud Architecture
+- **GCP Project ID:** `procureflow-eca`
+- **Primary Region:** `us-central1`
 
-Java 25, Spring Boot 4.1.0, Spring Data MongoDB, Config/Eureka clients, Firestore, and Actuator. The service owns supplier profiles, embedded contacts/addresses, status/soft deletion, catalog offerings, indexes, and local-only idempotent sample data.
+## Parent Repository
 
-Public APIs are `/api/suppliers/**` and `/api/catalog-items/**`. Order uses `/internal/suppliers/{id}/active`; Gateway never exposes it.
+This repository is included as a Git submodule of the CloudProcure Services super-repository:
 
-## Build, test, and run
+https://github.com/thenurinethangi/cloudprocure-services
+
+## Live Application
+
+https://procureflow-frontend-7vni4yihhq-uc.a.run.app
+
+## Purpose
+
+The Supplier Service manages supplier and supplier catalog information.
+
+Main responsibilities include:
+
+- Supplier profiles
+- Supplier status
+- Supplier contacts
+- Supplier categories
+- Catalog items
+- Catalog availability
+- Supplier-related activity events
+
+## Technology Stack
+
+- Java 25
+- Spring Boot 4.1.0
+- Spring Data MongoDB
+- MongoDB
+- Google Firestore
+- Spring Cloud Config Client
+- Eureka Client
+- Spring Boot Actuator
+
+## API
+
+Main API paths:
+
+- `/api/suppliers`
+- `/api/catalog-items`
+
+Default application port:
+
+`8082`
+
+Health endpoint:
+
+`/actuator/health`
+
+## Data and Cloud Integration
+
+Supplier and catalog data is stored in **MongoDB**.
+
+Application activity and audit events are stored in **Google Firestore**.
+
+Examples include:
+
+- `SUPPLIER_CREATED`
+- `CATALOG_ITEM_CREATED`
+
+## GCP Deployment
+
+The service is deployed to Google Compute Engine using:
+
+- Managed Instance Group
+- Multiple VM instances
+- Multi-zone deployment
+- Autoscaling
+- Instance Template
+- Health Check
+- Custom VPC
+- Cloud NAT
+- Service Account
+- PM2 process management
+
+The MongoDB server runs inside the private project network.
+
+The service loads configuration from Config Server and registers with Eureka.
+
+## Build and Test
+
+Windows:
 
 ```powershell
 .\mvnw.cmd clean test
 .\mvnw.cmd clean package
-$env:SPRING_PROFILES_ACTIVE='local'
-$env:MONGODB_URI='<LOCAL_MONGODB_URI>'
-$env:CONFIG_SERVER_URL='http://localhost:8888'
-.\mvnw.cmd spring-boot:run
-```
-
-Default port/health: `8082`, `/actuator/health`. Use the same local `ACTIVITY_LOG_PATH` as the other business services. Production publishes independently to Firestore through ADC and never seeds sample data or uses shared filesystem state. No credential files belong in the repository.
-
-The baseline has no authentication. Production actor identity cannot come from development headers; future authorization maps authenticated principals to the approved roles.
