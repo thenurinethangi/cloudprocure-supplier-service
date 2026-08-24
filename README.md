@@ -90,10 +90,53 @@ The MongoDB server runs inside the private project network.
 
 The service loads configuration from Config Server and registers with Eureka.
 
-## Build and Test
+## Setup / Getting Started
+
+### Prerequisites
+
+- Java 25
+- MongoDB
+- Maven Wrapper included with the project
+- Config Server
+- Eureka Server
+
+### Build and Test
 
 Windows:
 
 ```powershell
 .\mvnw.cmd clean test
 .\mvnw.cmd clean package
+```
+
+Linux/macOS:
+
+```bash
+./mvnw clean test
+./mvnw clean package
+```
+
+### Run Locally
+
+Windows PowerShell:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE="local"
+$env:CONFIG_SERVER_URL="http://localhost:8888"
+
+.\mvnw.cmd spring-boot:run
+```
+
+Default port:
+
+```text
+8082
+```
+
+Health endpoint:
+
+```text
+http://localhost:8082/actuator/health
+```
+
+Production MongoDB credentials and Google Cloud configuration are supplied externally and are not committed to Git.
